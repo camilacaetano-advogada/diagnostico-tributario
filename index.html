@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico de Riscos Fiscais | Camila Arcanjo</title>
+    <!-- Google Fonts para uma tipografia clean e elegante -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vinho-deep: #5C1A2B;
+            --dourado: #C9A96E;
+            --bg-claro: #F5EFE6;
+            --texto-escuro: #2C2C2A;
+            --branco: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-claro);
+            color: var(--texto-escuro);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: var(--branco);
+            width: 100%;
+            max-width: 550px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(92, 26, 43, 0.08);
+            padding: 40px 30px;
+            border-top: 5px solid var(--vinho-deep);
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--vinho-deep);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .logo-subtitle {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--dourado);
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #EAEAEA;
+            border-radius: 2px;
+            margin-bottom: 30px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--dourado);
+            width: 25%;
+            transition: width 0.3s ease;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: var(--vinho-deep);
+            line-height: 1.4;
+        }
+
+        /* Opções de Seleção Estilizadas */
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .option-card {
+            background: #FFF;
+            border: 1px solid #E0E0E0;
+            padding: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-card:hover {
+            border-color: var(--vinho-deep);
+            background: rgba(92, 26, 43, 0.02);
+        }
+
+        .option-card.selected {
+            border-color: var(--vinho-deep);
+            background: rgba(92, 26, 43, 0.05);
+            font-weight: 500;
+        }
+
+        .option-card input {
+            margin-right: 12px;
+            accent-color: var(--vinho-deep);
+        }
+
+        /* Inputs de texto */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: var(--vinho-deep);
+        }
+
+        /* Botões */
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .btn-next {
+            background: var(--vinho-deep);
+            color: var(--branco);
+        }
+
+        .btn-next:hover {
+            opacity: 0.9;
+        }
+
+        .btn-prev {
+            background: #EAEAEA;
+            color: var(--texto-escuro);
+        }
+
+        .btn-prev:hover {
+            background: #DFDFDF;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-whatsapp:hover {
+            background: #20BA59;
+        }
+
+        .disclaimer {
+            font-size: 11px;
+            color: #777;
+            text-align: center;
+            margin-top: 25px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo">CAMILA ARCANJO</div>
+        <div class="logo-subtitle">Advocacia & Consultoria Jurídica</div>
+        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    </div>
+
+    <!-- PASSO 1: Perfil do Cliente -->
+    <div class="step active" id="step1">
+        <h2>Para começarmos, qual é a sua principal atividade profissional?</h2>
+        <div class="options-group">
+            <div class="option-card" onclick="selectRadio('perfil', 'Médico(a) Plantonista / Autônomo')">
+                <input type="radio" name="perfil" value="Médico(a) Plantonista / Autônomo"> Médico(a) Plantonista / Autônomo
+            </div>
+            <div class="option-card" onclick="selectRadio('perfil', 'Sócio(a) de Clínica, Consultório ou Hospital')">
+                <input type="radio" name="perfil" value="Sócio(a) de Clínica, Consultório ou Hospital"> Sócio(a) de Clínica, Consultório ou Hospital
+            </div>
+            <div class="option-card" onclick="selectRadio('perfil', 'Dono(a) de Empresa (Outros Setores)')">
+                <input type="radio" name="perfil" value="Dono(a) de Empresa (Outros Setores)"> Dono(a) de Empresa (Outros Setores)
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-next" onclick="nextStep(2)">Avançar</button>
+        </div>
+    </div>
+
+    <!-- PASSO 2: Tamanho do Cenário -->
+    <div class="step" id="step2">
+        <h2>Selecione a opção que melhor descreve a sua realidade atual:</h2>
+        <div class="options-group">
+            <div class="option-card" onclick="selectRadio('cenario', 'Atuo em 2 ou mais hospitais/vínculos diferentes')">
+                <input type="radio" name="cenario" value="Atuo em 2 ou mais hospitais/vínculos diferentes"> Atuo em 2 ou mais hospitais/vínculos diferentes
+            </div>
+            <div class="option-card" onclick="selectRadio('cenario', 'Empresa/Clínica com faturamento acima de R$ 30 mil/mês')">
+                <input type="radio" name="cenario" value="Empresa/Clínica com faturamento acima de R$ 30 mil/mês"> Empresa/Clínica com faturamento acima de R$ 30 mil/mês
+            </div>
+            <div class="option-card" onclick="selectRadio('cenario', 'Recém-aberto / Faturamento inicial ou variável')">
+                <input type="radio" name="cenario" value="Recém-aberto / Faturamento inicial ou variável"> Recém-aberto / Faturamento inicial ou variável
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-prev" onclick="prevStep(1)">Voltar</button>
+            <button class="btn btn-next" onclick="nextStep(3)">Avançar</button>
+        </div>
+    </div>
+
+    <!-- PASSO 3: Identificação de Riscos (Múltipla Escolha) -->
+    <div class="step" id="step3">
+        <h2>Quais são os seus maiores receios ou gargalos hoje? (Selecione todos que aplicar)</h2>
+        <div class="options-group">
+            <div class="option-card" onclick="toggleCheckbox(this)">
+                <input type="checkbox" name="dores" value="Incerteza sobre os impactos da Reforma Tributária"> Incerteza sobre os impactos da Reforma Tributária
+            </div>
+            <div class="option-card" onclick="toggleCheckbox(this)">
+                <input type="checkbox" name="dores" value="Alta carga tributária retida no CPF"> Alta carga tributária retida no CPF
+            </div>
+            <div class="option-card" onclick="toggleCheckbox(this)">
+                <input type="checkbox" name="dores" value="Medo de autuações ou cruzamento de dados por IA do Fisco"> Medo de autuações ou cruzamento de dados por IA do Fisco
+            </div>
+            <div class="option-card" onclick="toggleCheckbox(this)">
+                <input type="checkbox" name="dores" value="Nunca fiz uma auditoria ou planejamento tributário sério"> Nunca fiz uma auditoria ou planejamento tributário sério
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-prev" onclick="prevStep(2)">Voltar</button>
+            <button class="btn btn-next" onclick="nextStep(4)">Avançar</button>
+        </div>
+    </div>
+
+    <!-- PASSO 4: Contato e Envio -->
+    <div class="step" id="step4">
+        <h2>Para onde devemos enviar o resultado da sua triagem prévia?</h2>
+        <div class="input-group">
+            <input type="text" id="nome" class="input-field" placeholder="Seu Nome Completo" required>
+            <input type="email" id="email" class="input-field" placeholder="Seu Melhor E-mail" required>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-prev" onclick="prevStep(3)">Voltar</button>
+            <button class="btn btn-next btn-whatsapp" onclick="enviarWhatsapp()">Gerar Diagnóstico no WhatsApp</button>
+        </div>
+        <p class="disclaimer">Este sistema realiza um mapeamento preliminar de cenários e não substitui uma consulta jurídica individualizada.</p>
+    </div>
+</div>
+
+<script>
+    // Seu número atualizado com o código internacional do Brasil (55)
+    const SEU_WHATSAPP = "5531984609936"; 
+
+    function selectRadio(name, value) {
+        const cards = document.getElementsByName(name)[0].closest('.options-group').querySelectorAll('.option-card');
+        cards.forEach(card => card.classList.remove('selected'));
+        
+        const radioButton = Array.from(document.getElementsByName(name)).find(r => r.value === value);
+        radioButton.checked = true;
+        radioButton.closest('.option-card').classList.add('selected');
+    }
+
+    function toggleCheckbox(card) {
+        const checkbox = card.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+        card.classList.toggle('selected', checkbox.checked);
+    }
+
+    function nextStep(step) {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + step).classList.add('active');
+        document.getElementById('progress').style.width = (step * 25) + '%';
+    }
+
+    function prevStep(step) {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById('step' + step).classList.add('active');
+        document.getElementById('progress').style.width = (step * 25) + '%';
+    }
+
+    function enviarWhatsapp() {
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        
+        if (!nome || !email) {
+            alert("Por favor, preencha o seu nome e e-mail.");
+            return;
+        }
+
+        const perfilSelected = document.querySelector('input[name="perfil"]:checked');
+        const cenarioSelected = document.querySelector('input[name="cenario"]:checked');
+        
+        const perfil = perfilSelected ? perfilSelected.value : "Não informado";
+        const cenario = cenarioSelected ? cenarioSelected.value : "Não informado";
+        
+        let dores = [];
+        document.querySelectorAll('input[name="dores"]:checked').forEach(cb => dores.push(cb.value));
+        const doresTexto = dores.length > 0 ? dores.join(", ") : "Nenhuma selecionada";
+
+        // Formatação da mensagem para o seu chat
+        const texto = `Olá, Dra. Camila Arcanjo! Acabei de realizar a triagem no seu site para avaliar meus riscos fiscais.\n\n` +
+                      `*Meus Dados:* \n` +
+                      `• Nome: ${nome}\n` +
+                      `• E-mail: ${email}\n\n` +
+                      `*Perfil de Atuação:* \n${perfil}\n\n` +
+                      `*Cenário Atual:* \n${cenario}\n\n` +
+                      `*Gargalos & Preocupações:* \n${doresTexto}\n\n` +
+                      `Gostaria de agendar uma breve análise estratégica sobre o meu caso.`;
+
+        const url = `https://api.whatsapp.com/send?phone=${SEU_WHATSAPP}&text=${encodeURIComponent(texto)}`;
+        window.open(url, '_blank');
+    }
+</script>
+
+</body>
+</html>
